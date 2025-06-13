@@ -1,11 +1,16 @@
-const { where } = require('sequelize');
-const CursoModel = require('../models/CursoModel');
-const { request } = require('express');
+const CursoModel = require('../models/Curso');
+const TurmaModel = require('../models/Turma')
 module.exports = {
     //Lista de cursos
     async index(_request, response) {
         try {
-            const courses = await CursoModel.findAll();
+            const courses = await CursoModel.findAll({
+                include:
+                {
+                    model: TurmaModel,attributes:['nome'], 
+                    include: ['periodo', 'anolectivo', 'class']
+                }
+            });
             response.status(200).json(courses)
         } catch (error) {
             response.status(500).json(error.message)
@@ -24,7 +29,13 @@ module.exports = {
     //Listagem de um curso especifico
     async show(request, response) {
         try {
-            const curso = await CursoModel.findOne({ where: { id: request.params.id } })
+            const curso = await CursoModel.findOne({
+                where: { id: request.params.id }, include:
+                {
+                    model: TurmaModel, attributes:
+                        ['nome', 'periodoId'], include: ['periodo', 'anolectivo', 'class']
+                }
+            })
             if (curso === null) return response.status(404).json({ error: 'Curso não encontrado.' })
             response.status(200).json(curso)
         } catch (error) {

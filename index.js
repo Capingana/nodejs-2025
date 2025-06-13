@@ -3,7 +3,10 @@ const express = require('express')
 const app = express()
 const userRouter = require('./src/routes/UserRouter')
 const cursoRouter = require('./src/routes/CursoRouter')
-const anoLectivoRouter=require('./src/routes/AnoLectivoRouter')
+const anoLectivoRouter = require('./src/routes/AnoLectivoRouter')
+const classeRouter = require('./src/routes/ClasseRouter');
+const alunoRouter = require('./src/routes/AlunoRouter')
+
 const cors = require('cors')
 
 //configurações
@@ -19,6 +22,8 @@ app.use(express.urlencoded({ extends: false }))
 app.use('/', userRouter)
 app.use('/', cursoRouter)
 app.use('/', anoLectivoRouter)
+app.use('/', classeRouter)
+app.use('/', alunoRouter)
 
 
 app.listen(process.env.PORT, function () {
